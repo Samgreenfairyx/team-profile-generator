@@ -1,149 +1,187 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
-const inquirer = require("inquirer");
-const path = require("path");
-const fs = require("fs");
+const inquirer = require('inquirer');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const render = require('./src/page-template');
+const fs = require('fs');
+const path = require('path');
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+const OUTPUT_DIR = path.resolve(__dirname, 'output');
+const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
-const render = require("./src/page-template.js");
+const teamMembers = [];
 
-// Check if the output directory exists, if not, create it
-if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR);
-    console.log("Output directory created:", OUTPUT_DIR);
-}
-
-// Function to prompt user for manager information
-function promptManager() {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Enter the manager's name:"
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Enter the manager's employee ID:"
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Enter the manager's email address:"
-        },
-        {
-            type: "input",
-            name: "officeNumber",
-            message: "Enter the manager's office number:"
+const managerQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'Enter the manager\'s name:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter a name.';
         }
-    ]);
-}
-
-// Function to prompt user for engineer information
-function promptEngineer() {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Enter the engineer's name:"
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Enter the engineer's employee ID:"
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Enter the engineer's email address:"
-        },
-        {
-            type: "input",
-            name: "github",
-            message: "Enter the engineer's GitHub username:"
+    },
+    {
+        type: 'input',
+        name: 'id',
+        message: 'Enter the manager\'s employee ID:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an employee ID.';
         }
-    ]);
-}
-
-// Function to prompt user for intern information
-function promptIntern() {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Enter the intern's name:"
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Enter the intern's employee ID:"
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Enter the intern's email address:"
-        },
-        {
-            type: "input",
-            name: "school",
-            message: "Enter the intern's school:"
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Enter the manager\'s email address:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an email address.';
         }
-    ]);
-}
-
-// Function to prompt user for adding additional team members or finishing
-function promptMenu() {
-    return inquirer.prompt([
-        {
-            type: "list",
-            name: "option",
-            message: "Select an option:",
-            choices: ["Add an engineer", "Add an intern", "Finish building the team"]
+    },
+    {
+        type: 'input',
+        name: 'officeNumber',
+        message: 'Enter the manager\'s office number:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an office number.';
         }
-    ]);
+    }
+];
+
+const engineerQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'Enter the engineer\'s name:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter a name.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'id',
+        message: 'Enter the engineer\'s employee ID:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an employee ID.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Enter the engineer\'s email address:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an email address.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'github',
+        message: 'Enter the engineer\'s GitHub username:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter a GitHub username.';
+        }
+    }
+];
+
+const internQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'Enter the intern\'s name:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter a name.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'id',
+        message: 'Enter the intern\'s employee ID:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an employee ID.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Enter the intern\'s email address:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter an email address.';
+        }
+    },
+    {
+        type: 'input',
+        name: 'school',
+        message: 'Enter the intern\'s school:',
+        validate: (input) => {
+            return input !== '' ? true : 'Please enter a school name.';
+        }
+    }
+];
+
+const menuQuestion = [
+    {
+        type: 'list',
+        name: 'menuOption',
+        message: 'Select an option:',
+        choices: [
+            'Add an engineer',
+            'Add an intern',
+            'Finish building the team'
+        ]
+    }
+];
+
+async function promptManager() {
+    console.log('Please enter the manager\'s information:');
+    const answers = await inquirer.prompt(managerQuestions);
+    const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+    teamMembers.push(manager);
+    console.log('Manager added successfully!\n');
 }
 
-// Function to initialize the application
+async function promptEngineer() {
+    console.log('Please enter the engineer\'s information:');
+    const answers = await inquirer.prompt(engineerQuestions);
+    const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+    teamMembers.push(engineer);
+    console.log('Engineer added successfully!\n');
+}
+
+async function promptIntern() {
+    console.log('Please enter the intern\'s information:');
+    const answers = await inquirer.prompt(internQuestions);
+    const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
+    teamMembers.push(intern);
+    console.log('Intern added successfully!\n');
+}
+
+async function promptMenu() {
+    const answer = await inquirer.prompt(menuQuestion);
+    return answer.menuOption;
+}
+
 async function init() {
     try {
-        // Prompt user for manager information
-        const managerData = await promptManager();
-        const manager = new Manager(managerData.name, managerData.id, managerData.email, managerData.officeNumber);
-        teamMembers.push(manager);
-
-        // Prompt user for additional team members
-        let done = false;
-        while (!done) {
-            const menuChoice = await promptMenu();
-            switch (menuChoice.option) {
-                case "Add an engineer":
-                    // Prompt user for engineer information
-                    const engineerData = await promptEngineer();
-                    const engineer = new Engineer(engineerData.name, engineerData.id, engineerData.email, engineerData.github);
-                    teamMembers.push(engineer);
+        await promptManager();
+        let menuOption = await promptMenu();
+        while (menuOption !== 'Finish building the team') {
+            switch (menuOption) {
+                case 'Add an engineer':
+                    await promptEngineer();
                     break;
-                case "Add an intern":
-                    // Prompt user for intern information
-                    const internData = await promptIntern();
-                    const intern = new Intern(internData.name, internData.id, internData.email, internData.school);
-                    teamMembers.push(intern);
-                    break;
-                case "Finish building the team":
-                    // Generate HTML using the team members array and write to file
-                    const html = render(teamMembers);
-                    fs.writeFileSync(outputPath, html);
-                    console.log("Team profile successfully generated!");
-                    done = true;
+                case 'Add an intern':
+                    await promptIntern();
                     break;
             }
+            menuOption = await promptMenu();
         }
+        const html = render(teamMembers);
+        if (!fs.existsSync(OUTPUT_DIR)) {
+            fs.mkdirSync(OUTPUT_DIR);
+        }
+        fs.writeFileSync(outputPath, html);
+        console.log('Team profile successfully generated!');
     } catch (error) {
-        console.error("Error:", error);
+        console.error('Error:', error);
     }
 }
 
-// Call init function to start the application
 init();
