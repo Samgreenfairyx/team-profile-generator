@@ -94,6 +94,35 @@ module.exports = team => {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional CSS styles */
+        .employee-card {
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* Adjust width as needed */
+        }
+
+        .employee-card .card-body {
+            padding: 20px;
+        }
+
+        .employee-card .card-title {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .employee-card ul.list-group {
+            margin: 0;
+            padding: 0;
+        }
+
+        .employee-card ul.list-group li {
+            list-style: none;
+            padding: 5px 0;
+        }
+    </style>
     <script src="https://kit.fontawesome.com/c502137733.js"></script>
 </head>
 
@@ -107,12 +136,13 @@ module.exports = team => {
     </div>
     <div class="container">
         <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">
+            <div class="team-area col-12 d-flex justify-content-center flex-wrap">
                 ${generateTeam(team)}
             </div>
         </div>
     </div>
 </body>
+
 </html>
     `;
 };
