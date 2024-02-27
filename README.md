@@ -26,10 +26,12 @@ To use the application, follow these steps:
 6. Once completed, the application will generate an HTML file in the `output` folder named `team.html` containing the team profiles.
 
 ## Screenshots
+Usage
 ![image](https://github.com/Samgreenfairyx/team-profile-generator/assets/150940744/0d46333f-2b53-4c52-b762-8bed520b8bb2)
 
-![image](https://github.com/Samgreenfairyx/team-profile-generator/assets/150940744/f9afbd22-722d-445b-9e41-1382251b64fd)
 
+Test
+![image](https://github.com/Samgreenfairyx/team-profile-generator/assets/150940744/f9afbd22-722d-445b-9e41-1382251b64fd)
 
 ## License
 This project is licensed under the MIT license.
@@ -39,7 +41,7 @@ Contributions are welcome. Please submit any bug fixes or feature requests throu
 
 ## Tests
 To run tests, run the following command:
-npm test
+npx jest
 
 
 ## Questions
