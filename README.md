@@ -25,6 +25,12 @@ To use the application, follow these steps:
 5. Choose the option to finish building the team when you have entered all team members.
 6. Once completed, the application will generate an HTML file in the `output` folder named `team.html` containing the team profiles.
 
+## Screenshots
+![image](https://github.com/Samgreenfairyx/team-profile-generator/assets/150940744/0d46333f-2b53-4c52-b762-8bed520b8bb2)
+
+![image](https://github.com/Samgreenfairyx/team-profile-generator/assets/150940744/f9afbd22-722d-445b-9e41-1382251b64fd)
+
+
 ## License
 This project is licensed under the MIT license.
 
